@@ -1,9 +1,10 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import admin from 'firebase-admin';
 import path from 'path';
 import fs from 'fs';
+import { DocumentData } from 'firebase-admin/firestore';
 
 // Initialize Firebase
 const serviceAccountPath = path.join(__dirname, 'firebaseServiceKey.json');
@@ -13,13 +14,16 @@ if (!fs.existsSync(serviceAccountPath)) {
 }
 
 admin.initializeApp({
-  credential: admin.credential.cert(require(serviceAccountPath))
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  }),
 });
 
 const db = admin.firestore();
 const appointmentsRef = db.collection('appointments');
 
-// Set up Express
 const app = express();
 const PORT = 5000;
 
@@ -27,7 +31,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // POST: Book new appointment
-app.post('/api/appointments', async (req, res) => {
+app.post('/api/appointments', async (req: Request, res: Response) => {
   const { name, phone, email, date, time, service } = req.body;
 
   if (!name || !phone || !date || !time || !service) {
@@ -35,7 +39,6 @@ app.post('/api/appointments', async (req, res) => {
   }
 
   try {
-    // Prevent double booking
     const snapshot = await appointmentsRef
       .where('date', '==', date)
       .where('time', '==', time)
@@ -53,8 +56,8 @@ app.post('/api/appointments', async (req, res) => {
   }
 });
 
-// GET: All appointments for a specific date
-app.get('/api/appointments', async (req, res) => {
+// GET: Appointments for a specific date
+app.get('/api/appointments', async (req: Request, res: Response) => {
   const date = req.query.date as string;
 
   if (!date) {
@@ -63,7 +66,7 @@ app.get('/api/appointments', async (req, res) => {
 
   try {
     const snapshot = await appointmentsRef.where('date', '==', date).get();
-    const appointments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const appointments = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     res.json(appointments);
   } catch (err) {
     console.error('❌ Error fetching appointments:', err);
@@ -72,7 +75,7 @@ app.get('/api/appointments', async (req, res) => {
 });
 
 // GET: Search appointments by name/phone/email
-app.get('/api/appointments/search', async (req, res) => {
+app.get('/api/appointments/search', async (req: Request, res: Response) => {
   const query = (req.query.q as string)?.toLowerCase();
 
   if (!query) {
@@ -82,7 +85,7 @@ app.get('/api/appointments/search', async (req, res) => {
   try {
     const snapshot = await appointmentsRef.get();
     const results = snapshot.docs
-      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .map((doc: DocumentData) => ({ id: doc.id, ...doc.data() }))
       .filter((appt: any) =>
         appt.name?.toLowerCase().includes(query) ||
         appt.phone?.toLowerCase().includes(query) ||
@@ -97,7 +100,7 @@ app.get('/api/appointments/search', async (req, res) => {
 });
 
 // PATCH: Update appointment time
-app.patch('/api/appointments/update/:id', async (req, res) => {
+app.patch('/api/appointments/update/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { time } = req.body;
 
@@ -122,7 +125,7 @@ app.patch('/api/appointments/update/:id', async (req, res) => {
 });
 
 // DELETE: Remove appointment
-app.delete('/api/appointments/delete/:id', async (req, res) => {
+app.delete('/api/appointments/delete/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -141,8 +144,7 @@ app.delete('/api/appointments/delete/:id', async (req, res) => {
   }
 });
 
-// Start server
+// Start the server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server is running on http://<your-ip>:${PORT}`);
 });
-
