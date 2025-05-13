@@ -2,18 +2,8 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import admin from 'firebase-admin';
-import path from 'path';
-import fs from 'fs';
-import { firestore } from 'firebase-admin';
-type DocumentData = firestore.DocumentData;
 
-// Initialize Firebase
-const serviceAccountPath = path.join(__dirname, 'firebaseServiceKey.json');
-if (!fs.existsSync(serviceAccountPath)) {
-  console.error('❌ firebaseServiceKey.json not found');
-  process.exit(1);
-}
-
+// ✅ Firebase Init from environment variables
 admin.initializeApp({
   credential: admin.credential.cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
@@ -31,7 +21,7 @@ const PORT = 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// POST: Book new appointment
+// POST: Book appointment
 app.post('/api/appointments', async (req: Request, res: Response) => {
   const { name, phone, email, date, time, service } = req.body;
 
@@ -57,7 +47,7 @@ app.post('/api/appointments', async (req: Request, res: Response) => {
   }
 });
 
-// GET: Appointments for a specific date
+// GET: Appointments for specific date
 app.get('/api/appointments', async (req: Request, res: Response) => {
   const date = req.query.date as string;
 
@@ -75,7 +65,7 @@ app.get('/api/appointments', async (req: Request, res: Response) => {
   }
 });
 
-// GET: Search appointments by name/phone/email
+// GET: Search appointments
 app.get('/api/appointments/search', async (req: Request, res: Response) => {
   const query = (req.query.q as string)?.toLowerCase();
 
@@ -86,7 +76,7 @@ app.get('/api/appointments/search', async (req: Request, res: Response) => {
   try {
     const snapshot = await appointmentsRef.get();
     const results = snapshot.docs
-      .map((doc: DocumentData) => ({ id: doc.id, ...doc.data() }))
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
       .filter((appt: any) =>
         appt.name?.toLowerCase().includes(query) ||
         appt.phone?.toLowerCase().includes(query) ||
@@ -100,7 +90,7 @@ app.get('/api/appointments/search', async (req: Request, res: Response) => {
   }
 });
 
-// PATCH: Update appointment time
+// PATCH: Reschedule
 app.patch('/api/appointments/update/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { time } = req.body;
@@ -145,7 +135,7 @@ app.delete('/api/appointments/delete/:id', async (req: Request, res: Response) =
   }
 });
 
-// Start the server
+// Start server
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Server is running on http://<your-ip>:${PORT}`);
+  console.log(`✅ Server is running on http://localhost:${PORT}`);
 });
