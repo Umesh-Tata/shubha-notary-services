@@ -1,0 +1,9 @@
+# Ignore dependencies
+node_modules/
+
+# Ignore secrets
+.env
+firebaseServiceKey.json
+
+# Ignore build output
+dist/

@@ -1,0 +1,131 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: 'Inter', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.app {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.hero {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+  border-radius: 12px;
+  margin-bottom: 40px;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  margin: 0;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin: 15px 0 40px 0;
+}
+
+.btn-primary {
+  margin-top: 40px; 
+  padding: 12px 24px;
+  background-color: #ffc107;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-primary.active {
+  background-color: #ff9800;
+  color: #fff;
+}
+
+.services, .about, .contact {
+  padding: 40px 20px;
+}
+
+.services ul {
+  list-style: none;
+  padding: 0;
+}
+
+.services li {
+  margin: 10px 0;
+  font-size: 1.1rem;
+}
+
+footer {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #eee;
+  width: 100%;
+  border-radius: 8px;
+}
+.booking-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.calendar-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.times {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.time-btn {
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.time-btn.active {
+  background-color: #ffc107;
+  color: black;
+  font-weight: bold;
+}
+
+.summary-section {
+  min-width: 250px;
+  max-width: 300px;
+  background: #f1f1f1;
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.confirm-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #1e3c72;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
