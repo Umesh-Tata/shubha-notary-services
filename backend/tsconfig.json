@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": ".",       
+    "rootDir": "./src",       
     "module": "commonjs",
     "target": "es6",
     "esModuleInterop": true,
     "strict": true,
     "resolveJsonModule": true
   },
-  "include": ["index.ts", "firebaseServiceKey.json"]
+  "include": ["src/index.tsx.ts", "firebaseServiceKey.json"]
   
 }
