@@ -4,7 +4,8 @@ import bodyParser from 'body-parser';
 import admin from 'firebase-admin';
 import path from 'path';
 import fs from 'fs';
-import { DocumentData } from 'firebase-admin/firestore';
+import { firestore } from 'firebase-admin';
+type DocumentData = firestore.DocumentData;
 
 // Initialize Firebase
 const serviceAccountPath = path.join(__dirname, 'firebaseServiceKey.json');
