@@ -120,7 +120,13 @@ const BookingPage = () => {
   };
 
   return (
-    <div className="booking-container">
+    <form
+      className="booking-container"
+      onSubmit={(e) => e.preventDefault()}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') e.preventDefault();
+      }}
+    >
       <div className="calendar-section">
         <h2>Select Date</h2>
         <input
@@ -147,6 +153,7 @@ const BookingPage = () => {
           {availableTimeSlots.map((time) => (
             <button
               key={time}
+              type="button"
               onClick={() => handleTimeClick(time)}
               className={`time-btn ${selectedTime === time ? 'active' : ''}`}
             >
@@ -176,7 +183,14 @@ const BookingPage = () => {
             <input
               type="tel"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => {
+                const onlyDigits = e.target.value.replace(/\D/g, '');
+                if (onlyDigits.length <= 10) {
+                  setPhone(onlyDigits);
+                }
+              }}
+              maxLength={10}
+              placeholder="Enter 10-digit phone number"
               required
               style={{ flex: 1, padding: '8px' }}
             />
@@ -211,6 +225,7 @@ const BookingPage = () => {
         </select>
 
         <button
+          type="button"
           disabled={!selectedTime || !service || !name || !phone || submitting}
           className="confirm-btn"
           onClick={handleConfirm}
@@ -220,7 +235,7 @@ const BookingPage = () => {
 
         {message && <p style={{ marginTop: '10px' }}>{message}</p>}
       </div>
-    </div>
+    </form>
   );
 };
 

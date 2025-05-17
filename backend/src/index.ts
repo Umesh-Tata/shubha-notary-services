@@ -48,20 +48,31 @@ app.post('/api/appointments', async (req: Request, res: Response) => {
 });
 
 // GET: Appointments for specific date
-app.get('/api/appointments', async (req: Request, res: Response) => {
-  const date = req.query.date as string;
+app.get('/api/appointments/search', async (req: Request, res: Response) => {
+  const query = (req.query.q as string)?.toLowerCase();
 
-  if (!date) {
-    return res.status(400).json({ error: 'Date is required' });
+  if (!query) {
+    return res.status(400).json({ error: 'Search query is required' });
   }
 
   try {
-    const snapshot = await appointmentsRef.where('date', '==', date).get();
-    const appointments = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    res.json(appointments);
+    const snapshot = await appointmentsRef.get();
+    const results = snapshot.docs
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .filter((appt: any) =>
+        appt.name?.toLowerCase() === query ||
+        appt.phone?.toLowerCase() === query ||
+        appt.email?.toLowerCase() === query
+      );
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No matching appointments found' });
+    }
+
+    res.json(results);
   } catch (err) {
-    console.error('❌ Error fetching appointments:', err);
-    res.status(500).json({ error: 'Failed to get appointments' });
+    console.error('❌ Search error:', err);
+    res.status(500).json({ error: 'Failed to search appointments' });
   }
 });
 
