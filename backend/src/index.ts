@@ -76,31 +76,6 @@ app.get('/api/appointments/search', async (req: Request, res: Response) => {
   }
 });
 
-// GET: Search appointments
-app.get('/api/appointments/search', async (req: Request, res: Response) => {
-  const query = (req.query.q as string)?.toLowerCase();
-
-  if (!query) {
-    return res.status(400).json({ error: 'Search query is required' });
-  }
-
-  try {
-    const snapshot = await appointmentsRef.get();
-    const results = snapshot.docs
-      .map((doc) => ({ id: doc.id, ...doc.data() }))
-      .filter((appt: any) =>
-        appt.name?.toLowerCase().includes(query) ||
-        appt.phone?.toLowerCase().includes(query) ||
-        appt.email?.toLowerCase().includes(query)
-      );
-
-    res.json(results);
-  } catch (err) {
-    console.error('❌ Search error:', err);
-    res.status(500).json({ error: 'Failed to search appointments' });
-  }
-});
-
 // PATCH: Reschedule
 app.patch('/api/appointments/update/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
