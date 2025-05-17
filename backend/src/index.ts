@@ -76,6 +76,7 @@ app.get('/api/appointments/search', async (req: Request, res: Response) => {
   }
 });
 
+
 // PATCH: Reschedule
 app.patch('/api/appointments/update/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
