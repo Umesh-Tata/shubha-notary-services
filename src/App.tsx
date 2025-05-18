@@ -1,18 +1,19 @@
 import { useRef } from 'react';
 import './App.css';
 // import BookingPage from './pages/BookingPage';
-import AppointmentManager from './pages/AppointmentManager';
+// import AppointmentManager from './pages/AppointmentManager';
 
 function App() {
   // 🔒 Old logic preserved but disabled:
   // const [showBookingPage, setShowBookingPage] = useState(false);
   // const [activeTab, setActiveTab] = useState<'book' | 'manage'>('book');
 
-  const appointmentSectionRef = useRef<HTMLDivElement>(null);
+  const contactSectionRef = useRef<HTMLDivElement>(null);
 
   const scrollToAppointments = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    appointmentSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    contactSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+
   };
 
   // const handleBookingClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -38,14 +39,27 @@ function App() {
           </header>
 
           <section className="services">
-            <h2>Our Services</h2>
-            <ul>
-              <li>Document Notarization</li>
-              <li>Real Estate Closings</li>
-              <li>Mobile Notary Visits</li>
-              <li>Power of Attorney</li>
-            </ul>
-          </section>
+  <h2>Our Services</h2>
+  <div className="service-grid">
+    {[
+      'Acknowledgment statement notarization',
+      'Affidavit & oath notarization',
+      'Certified copy services',
+      'General notarization',
+      'International document notarization',
+      'Loan notarization',
+      'Power of attorney document notarization',
+      'Property registration notarization',
+      'Shipping document notarization',
+      'Wills & trusts notarization',
+    ].map((service) => (
+      <div key={service} className="service-card">
+        {service}
+      </div>
+    ))}
+  </div>
+</section>
+
 
           <section className="about">
             <h2>Why Choose Us?</h2>
@@ -55,16 +69,33 @@ function App() {
             </p>
           </section>
 
-          <section id="appointments" ref={appointmentSectionRef} className="appointments">
+          {/*<section id="appointments" ref={appointmentSectionRef} className="appointments">
             <h2>My Appointments</h2>
             <AppointmentManager />
-          </section>
+          </section> */} 
 
-          <section id="contact" className="contact">
-            <h2>Contact Us</h2>
-            <p>Email: subhanotaryservices@gmail.com</p>
-            <p>Phone: (316) 456-7890</p>
-          </section>
+          <section id="contact" className="contact" ref={contactSectionRef}>
+  <div className="contact-wrapper">
+    <div className="contact-info">
+      <h2>Contact Us</h2>
+      <p>Email:  <a href="mailto:subhanotaryservices@gmail.com">subhanotaryservices@gmail.com</a></p>
+      <p>Phone: <a href="tel:(316)456-7890">(316) 456-7890</a></p>
+
+    </div>
+    {/* add location if you want */}
+    {/*<iframe
+      title="Our Location"
+      src=""
+      width="300"
+      height="200"
+      style={{ border: 0, borderRadius: '10px' }}
+      allowFullScreen={false}
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+    />*/}
+  </div>
+</section>
+
 
           <footer>
             <p>&copy; {new Date().getFullYear()} Subha Notary Services</p>

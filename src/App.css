@@ -1,5 +1,5 @@
 body, html {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   min-height: 100%;
   font-family: 'Inter', sans-serif;
@@ -129,3 +129,72 @@ footer {
   border-radius: 6px;
   cursor: pointer;
 }
+.contact {
+  background-color: #f8f9fa;
+  width: 100vw;         /* Full screen width */
+  margin-left: calc(-50vw + 50%); /* Align with viewport */
+  padding: 40px 0;
+}
+
+.contact-wrapper {
+  max-width: 800px;      /* Same as .app */
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 0 20px;
+}
+
+
+.contact-info {
+  flex: 1;
+  min-width: 250px;
+}
+
+.contact iframe {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* ✅ ONLY for small screens */
+@media (max-width: 768px) {
+  .contact-wrapper {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .contact-info {
+    text-align: center;
+  }
+
+  .contact iframe {
+    display: block;
+    margin: 0 auto;
+    max-width: 90vw;
+    width: 100%;
+  }
+}
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.service-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-size: 1rem;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
