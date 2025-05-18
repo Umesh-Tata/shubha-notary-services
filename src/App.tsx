@@ -1,30 +1,38 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import './App.css';
-import BookingPage from './pages/BookingPage';
+// import BookingPage from './pages/BookingPage';
 import AppointmentManager from './pages/AppointmentManager';
 
 function App() {
-  const [showBookingPage, setShowBookingPage] = useState(false);
-  const [activeTab, setActiveTab] = useState<'book' | 'manage'>('book');
+  // 🔒 Old logic preserved but disabled:
+  // const [showBookingPage, setShowBookingPage] = useState(false);
+  // const [activeTab, setActiveTab] = useState<'book' | 'manage'>('book');
 
-  const handleBookingClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const appointmentSectionRef = useRef<HTMLDivElement>(null);
+
+  const scrollToAppointments = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    setShowBookingPage(true);
+    appointmentSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleBackClick = () => {
-    setShowBookingPage(false);
-    setActiveTab('book');
-  };
+  // const handleBookingClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  //   e.preventDefault();
+  //   setShowBookingPage(true);
+  // };
+
+  // const handleBackClick = () => {
+  //   setShowBookingPage(false);
+  //   setActiveTab('book');
+  // };
 
   return (
     <div className="app">
-      {!showBookingPage ? (
+      {/* {!showBookingPage ? ( */}
         <>
           <header className="hero">
             <h1>Shubha Notary Services</h1>
             <p>Reliable. Certified. Convenient.</p>
-            <a href="#book" className="btn-primary" onClick={handleBookingClick}>
+            <a href="#appointments" className="btn-primary" onClick={scrollToAppointments}>
               Book an Appointment
             </a>
           </header>
@@ -47,6 +55,11 @@ function App() {
             </p>
           </section>
 
+          <section id="appointments" ref={appointmentSectionRef} className="appointments">
+            <h2>My Appointments</h2>
+            <AppointmentManager />
+          </section>
+
           <section id="contact" className="contact">
             <h2>Contact Us</h2>
             <p>Email: subhanotaryservices@gmail.com</p>
@@ -57,7 +70,7 @@ function App() {
             <p>&copy; {new Date().getFullYear()} Subha Notary Services</p>
           </footer>
         </>
-      ) : (
+      {/* ) : (
         <>
           <button className="btn-primary" onClick={handleBackClick} style={{ margin: '20px' }}>
             ← Back to Home
@@ -80,7 +93,7 @@ function App() {
 
           {activeTab === 'book' ? <BookingPage /> : <AppointmentManager />}
         </>
-      )}
+      )} */}
     </div>
   );
 }
